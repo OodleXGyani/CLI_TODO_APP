@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import SwipeableTaskItem from '../Tasks/SwipeableTaskItem';
 
 import { Task } from '../../Types/Task';
 import { useTasks } from '../../Context/TaskContext';
@@ -29,7 +30,10 @@ export default function CurrentTasksSection({
 
       {/* Task List */}
       {tasks.map(task => (
-        <View key={task.id} style={styles.taskCard}>
+
+        <SwipeableTaskItem key={task.id} task={task} onDelete={() => removeTask(task.id)} onComplete={() => updateTaskStatus(task.id, 'completed')}>
+
+        <View style={styles.taskCard}>
           <View style={styles.taskContent}>
             <View style={styles.taskDot} />
             <Text
@@ -59,6 +63,7 @@ export default function CurrentTasksSection({
             </TouchableOpacity>
           </View>
         </View>
+        </SwipeableTaskItem>
       ))}
     </View>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import SwipeableTaskItem from './SwipeableTaskItem';
 
 import { Task } from '../../Types/Task';
 import { useTasks } from '../../Context/TaskContext';
@@ -29,7 +30,9 @@ export default function CompletedTasksSection({
 
       {/* Task List */}
       {tasks.map(task => (
-        <View key={task.id} style={styles.taskCard}>
+        <SwipeableTaskItem key={task.id} task={task} onDelete={() => removeTask(task.id)} onComplete={() => {Alert.alert("Task already completed") }}>
+
+        <View  style={styles.taskCard}>
           <View style={styles.taskContent}>
             <View style={[styles.taskDot, { backgroundColor: '#10B981' }]} />
             <Text
@@ -51,6 +54,7 @@ export default function CompletedTasksSection({
             </TouchableOpacity>
           </View>
         </View>
+        </SwipeableTaskItem>
       ))}
     </View>
   );

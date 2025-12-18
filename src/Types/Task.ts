@@ -5,4 +5,6 @@ export interface Task {
   title: string;
   date: string; // YYYY-MM-DD
   status: TaskStatus;
+  createdAt: number;
+  
 }

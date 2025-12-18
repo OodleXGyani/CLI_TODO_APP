@@ -1,4 +1,5 @@
 import RootNavigator from "./Navigation/RootNavigator"
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 
 //----------- For better performance of navigation --------------
@@ -7,6 +8,10 @@ enableScreens();
 //---------------------------------------------------------------
 
 export default function App() {
-  return <RootNavigator/>;
-  
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootNavigator/>
+    </GestureHandlerRootView>
+  );
+
 }

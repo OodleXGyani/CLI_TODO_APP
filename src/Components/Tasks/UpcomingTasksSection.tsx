@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import SwipeableTaskItem from '../Tasks/SwipeableTaskItem';
 
 import { Task } from '../../Types/Task';
 import { useTasks } from '../../Context/TaskContext';
@@ -29,7 +30,9 @@ export default function UpcomingTasksSection({
 
       {/* Task List */}
       {tasks.map(task => (
-        <View key={task.id} style={styles.taskCard}>
+
+        <SwipeableTaskItem key={task.id} task={task} onDelete={() => removeTask(task.id)} onComplete={() => {Alert.alert("Marking upcoming tasks as completed is not supported") }}>
+        <View style={styles.taskCard}>
           <View style={styles.taskContent}>
             <View style={[styles.taskDot, { backgroundColor: '#F59E0B' }]} />
             <Text
@@ -51,6 +54,7 @@ export default function UpcomingTasksSection({
             </TouchableOpacity>
           </View>
         </View>
+        </SwipeableTaskItem>
       ))}
     </View>
   );

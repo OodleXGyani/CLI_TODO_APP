@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import { useTasks } from '../Context/TaskContext';
+import TasksHeader from '../Components/Headers/TasksHeader';
 import CurrentTasksSection from '../Components/Tasks/CurrentTasksSection';
 import UpcomingTasksSection from '../Components/Tasks/UpcomingTasksSection';
 import CompletedTasksSection from '../Components/Tasks/CompletedTasksSection';
@@ -45,28 +46,20 @@ export default function TasksScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+
+    <View style={styles.mainContainer}>
+
+      {/* Header */}
+        <TasksHeader
+          totalPending={totalPending}
+          totalCompleted={totalCompleted}
+          onAddPress={() => {setShowAddModal(true)}}
+        />
+
+
+
       <View style={styles.container}>
-        {/* Header */}
-        <View style={styles.headerGradient}>
-          <View style={styles.header}>
-            <View style={styles.headerContent}>
-              <Text style={styles.headerTitle}>My Tasks</Text>
-              <Text style={styles.taskSummary}>
-                {totalPending} pending • {totalCompleted} done
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              style={styles.addButton}
-              onPress={() => setShowAddModal(true)}
-              activeOpacity={0.85}
-            >
-              <FontAwesome5 name="plus" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
+      
         {/* Content */}
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -89,7 +82,8 @@ export default function TasksScreen() {
         </ScrollView>
       </View>
 
-      {/* Add Task Modal */}
+      
+    {/* Add Task Modal */}
       <Modal
         visible={showAddModal}
         transparent
@@ -144,66 +138,31 @@ export default function TasksScreen() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-    </SafeAreaView>
+
+
+    </View>
+
+    
   );
 }
-
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: '#F8FAFC',
   },
+  mainContainer:{
+    flex: 1,
+    gap: 10,
+  },
 
   container: {
     flex: 1,
     backgroundColor: '#F8FAFC',
-  },
-
-  headerGradient: {
-    backgroundColor: '#667EEA',
-    paddingVertical: 20,
-    paddingHorizontal: 16,
-    paddingTop: 50,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
-  },
-
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-
-  headerContent: {
-    flex: 1,
-  },
-
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#fff',
-    marginBottom: 4,
-  },
-
-  taskSummary: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.85)',
-    fontWeight: '500',
-  },
-
-  addButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 12,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    paddingTop: 16,
+    
   },
 
   scrollContent: {
@@ -237,6 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 1000,
   },
 
   modalContent: {
