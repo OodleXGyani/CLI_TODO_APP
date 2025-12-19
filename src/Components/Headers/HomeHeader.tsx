@@ -9,8 +9,10 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import logo from '../../Assets/Images/logo.png';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../../Context/AuthContext';
 
 const HomeHeader = () => {
+  const { user } = useAuth();
   return (
     <View style={styles.wrapper}>
         <View style={styles.container}>
@@ -22,7 +24,7 @@ const HomeHeader = () => {
                     style={styles.logo}
                   />
                   <Text style={styles.subtitle}>
-                    Welcome back, User!
+                    Welcome back, {user?.displayName || 'User'}!
                   </Text>
                 </View>
 
@@ -122,4 +124,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-

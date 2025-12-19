@@ -73,6 +73,18 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def appName = "CLI_Todo_App"
+            def buildType = variant.buildType.name
+            def versionName = variant.versionName
+
+            outputFileName = "${appName}-${buildType}-v${versionName}.apk"
+        }
+    }
+
+
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -120,3 +132,6 @@ dependencies {
 
 // Copy vector icons fonts to android assets so react-native-vector-icons works
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
+// Apply Google Services plugin at the end
+apply plugin: 'com.google.gms.google-services'
