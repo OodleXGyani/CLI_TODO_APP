@@ -1,16 +1,25 @@
-import { StyleSheet, View, ScrollView } from 'react-native'
-
+import { StyleSheet, View, ScrollView , Text } from 'react-native'
 import React from 'react'
 import Calendar from '../Components/Calendar'
 import { useTasks} from '../Context/TaskContext'
 import CurrentTasksSection from '../Components/Tasks/CurrentTasksSection';
+import CompletedTasksSection from '../Components/Tasks/CompletedTasksSection';
 import HomeHeader from '../Components/Headers/HomeHeader';
 
 
-const HomeScreen = () => {
-  let task = useTasks();
 
-  let currentTasks = task.tasks.filter(Tasks => Tasks.status === 'current');
+const HomeScreen = () => {
+ 
+  const {tasks , selectedDate} = useTasks();
+
+  let currentTasks = tasks.filter(tasks => tasks.status === 'current');
+
+  const completedTasksForDay = tasks.filter(
+    task =>{
+      return (task.status === 'completed' && 
+      task.date === selectedDate)
+    }
+  )
 
   return (
 
@@ -26,6 +35,21 @@ const HomeScreen = () => {
         <View style={styles.calendarWrapper}>
           <Calendar />
         </View>
+
+        {/* Completed Task on that day or sellected day List */}
+        {
+          completedTasksForDay.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No completed tasks for selected day.</Text>
+            </View>
+
+            
+          ) : (
+            <CompletedTasksSection tasks={completedTasksForDay} />
+          )
+
+
+        }
 
         {/*Current Tasks*/}
 
@@ -68,4 +92,23 @@ const styles = StyleSheet.create({
   taskWrapper: {
     marginBottom: 12,
   },
+  emptyState: {
+  marginTop: 16,
+  paddingVertical: 20,
+  paddingHorizontal: 16,
+  backgroundColor: '#F9FAFB',
+  borderRadius: 12,
+  borderWidth: 1,
+  borderColor: '#E5E7EB',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+emptyText: {
+  fontSize: 14,
+  fontWeight: '500',
+  color: '#6B7280',
+  textAlign: 'center',
+},
+
 });

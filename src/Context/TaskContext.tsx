@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState , useEffect } from 'react';
 import { Task } from '../Types/Task';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const TASKS_STORAGE_KEY = '@tasks';
 
 
 const DEFAULT_TASKS : Task[] = [
@@ -36,6 +39,8 @@ const DEFAULT_TASKS : Task[] = [
 
 interface TaskContextType {
   tasks: Task[];
+  selectedDate: string;
+  setSelectedDate: (date: string) => void;
   addTask: (task: Omit<Task, 'id' | 'createdAt'>) => void;
   updateTaskStatus: (id: string, status: Task['status']) => void;
   removeTask: (id: string) => void;
@@ -43,19 +48,60 @@ interface TaskContextType {
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
-export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
-  const [tasks, setTasks] = useState<Task[]>(DEFAULT_TASKS);
+const today = new Date().toISOString().split('T')[0];
 
-  const addTask = (task: Omit<Task, 'id' | 'createdAt'>) => {
-  setTasks(prev => [
-    ...prev,
-    {
-      ...task,
-      id: Date.now().toString(),
-      createdAt: Date.now(),
-    },
-  ]);
+export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>(today);
+
+  
+
+  // 🔹 Load tasks on app start
+  useEffect(() => {
+    loadTasks();
+  }, []);
+
+  const loadTasks = async () => {
+  try {
+    const storedTasks = await AsyncStorage.getItem(TASKS_STORAGE_KEY);
+
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    } else {
+      setTasks(DEFAULT_TASKS);
+      await AsyncStorage.setItem(
+        TASKS_STORAGE_KEY,
+        JSON.stringify(DEFAULT_TASKS)
+      );
+    }
+  } catch (error) {
+    console.log('Failed to load tasks', error);
+    setTasks(DEFAULT_TASKS);
+  }
 };
+
+  // 🔹 Save tasks whenever they change
+  useEffect(() => {
+    if (tasks.length > 0) {
+      AsyncStorage.setItem(
+        TASKS_STORAGE_KEY,
+        JSON.stringify(tasks)
+      ).catch(err => console.log('Failed to save tasks', err));
+    }
+  }, [tasks]);
+
+
+
+ const addTask = (task: Omit<Task, 'id' | 'createdAt'>) => {
+  const newTask: Task = {
+    ...task,
+    id: Date.now().toString(),
+    createdAt: Date.now(),
+  };
+
+  setTasks(prev => [...prev, newTask]);
+};
+
 
 
   const removeTask = (id: string) => {
@@ -73,7 +119,7 @@ export const TaskProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, addTask, updateTaskStatus, removeTask }}
+      value={{ tasks, addTask, updateTaskStatus, removeTask , selectedDate, setSelectedDate }}
     >
       {children}
     </TaskContext.Provider>
