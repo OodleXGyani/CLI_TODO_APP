@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../Components/Button';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const LoginScreen = () => {
   const { login, loading, error: authError } = useAuth();
@@ -177,7 +178,7 @@ const LoginScreen = () => {
             size="medium"
             style={styles.socialButton}
             icon={
-              <Text style={styles.socialIcon}>🔵</Text>
+              <FontAwesome5 name="google" size={20}  />
             }
           />
           <Button
@@ -187,7 +188,7 @@ const LoginScreen = () => {
             size="medium"
             style={styles.socialButton}
             icon={
-              <Ionicons name="logo-apple" size={20} color="#111827" />
+              <Ionicons name="logo-apple" size={20}  />
             }
           />
         </View>

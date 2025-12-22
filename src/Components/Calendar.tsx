@@ -1,12 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { useTasks } from '../Context/TaskContext';
+import { formatAsYYYYMMDD, parseAndDisplayDate } from '../utils/date';
 
 export default function Calendar() {
   const today = new Date();
-
-  const [selectedDate, setSelectedDate] = useState<number>(today.getDate());
+  const { selectedDate, setSelectedDate } = useTasks();
 
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
@@ -63,7 +64,12 @@ export default function Calendar() {
             return <View key={index} style={styles.dayCell} />;
           }
 
-          const selected = day === selectedDate;
+          const selected = selectedDate === formatAsYYYYMMDD(new Date(
+            currentYear,
+            currentMonth,
+            day
+          ));
+
           const todayCell = isToday(day);
 
           return (
@@ -71,7 +77,16 @@ export default function Calendar() {
               key={index}
               accessibilityRole="button"
               accessibilityLabel={`Select day ${day}`}
-              onPress={() => setSelectedDate(day)}
+              
+              onPress={() => {
+                const formattedDate = formatAsYYYYMMDD(new Date(
+                  currentYear,
+                  currentMonth,
+                  day
+                ));
+                setSelectedDate(formattedDate);
+              }}
+
               style={[
                 styles.dayCell,
                 {
@@ -109,7 +124,7 @@ export default function Calendar() {
         <View style={styles.selectedDateContent}>
           <Text style={styles.selectedDateLabel}>Selected</Text>
           <Text style={styles.selectedDateValue}>
-            {monthNames[currentMonth].substring(0, 3)} {selectedDate}
+            {parseAndDisplayDate(selectedDate).toDateString()}
           </Text>
         </View>
       </View>
