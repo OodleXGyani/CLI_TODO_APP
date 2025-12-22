@@ -14,6 +14,7 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import { useTasks } from '../Context/TaskContext';
+import { formatAsYYYYMMDD } from '../utils/date';
 import TasksHeader from '../Components/Headers/TasksHeader';
 import CurrentTasksSection from '../Components/Tasks/CurrentTasksSection';
 import UpcomingTasksSection from '../Components/Tasks/UpcomingTasksSection';
@@ -38,7 +39,7 @@ export default function TasksScreen() {
     addTask({
       title: taskTitle.trim(),
       status: 'current',
-      date: new Date().toISOString().split('T')[0],
+      date: formatAsYYYYMMDD(new Date()),
     });
 
     setTaskTitle('');

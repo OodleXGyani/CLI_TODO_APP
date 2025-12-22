@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useAuth } from '../Context/AuthContext';
 import { useNavigation } from '@react-navigation/native';
 import Button from '../Components/Button';
@@ -66,6 +67,9 @@ const RegisterScreen = () => {
 
     try {
       await register(email, password, fullName);
+      // Alert.alert('Registration Successful', 'You can now log in with your credentials.', [
+      //   { text: 'OK', onPress: () => navigation.navigate('Login') },
+      // ]);
     } catch (err: any) {
       setLocalError(err.message);
     }
@@ -236,7 +240,7 @@ const RegisterScreen = () => {
             size="medium"
             style={styles.socialButton}
             icon={
-              <Text style={styles.socialIcon}>🔵</Text>
+              <FontAwesome5 name="google" size={20} />
             }
           />
           <Button
